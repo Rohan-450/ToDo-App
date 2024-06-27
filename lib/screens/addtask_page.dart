@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import '../utils/todo.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({super.key});
@@ -9,7 +10,21 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  final TextEditingController _taskController = TextEditingController();
+  final _taskController = TextEditingController();
+  
+  final addList=ToDo.toDoList();
+
+  
+  void addTask(String toDo) {
+    setState(() {
+      addList.add(ToDo(
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        taskName: toDo,
+      ),
+      );
+    });
+    _taskController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +70,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   height:45,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Logic to add task to the list
-                      // For example, using a callback or state management
+                      addTask(_taskController.text);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: tBlue,

@@ -14,6 +14,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   final todosList=ToDo.toDoList();
+  List<ToDo> searchList = [];
+
+  @override
+  void initState() {
+    searchList = todosList;
+    super.initState();
+  }
   
   void checkBoxChanged(ToDo todo){
     setState(() {
@@ -26,6 +33,15 @@ class _HomePageState extends State<HomePage> {
       todosList.removeWhere((item) => item.id == id);
     });
   }
+
+  void searchTask(String query){
+    List<ToDo> results = [];
+    results = todosList.where((element) => element.taskName!.toLowerCase().contains(query.toLowerCase())).toList();
+    setState(() {
+      searchList = results;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +77,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: ListView(
                 children:[
-                  for( ToDo todoo in todosList)
+                  for( ToDo todoo in searchList.reversed)
                     ToDoTile(
                       todo: todoo,
                       onChanged: checkBoxChanged,
@@ -93,12 +109,13 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextField(
+                  onChanged: (value) => searchTask(value),
+                  decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(0),
                   prefixIcon: Icon(Icons.search, color: tBlack,size: 25,),
                   prefixIconConstraints: BoxConstraints(minWidth: 25, maxHeight: 20),
-                  hintText: "Search",
+                  hintText: " Search",
                   hintStyle: TextStyle(color: tGrey, fontSize: 20),
                   border: InputBorder.none,
                 ),
