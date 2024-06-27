@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo_app/screens/addtask_page.dart';
 import '../constants/colors.dart';
 import '../utils/todo.dart';
@@ -13,11 +14,33 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  //final _myBox = Hive.box('mybox');
+  //ToDoDataBase db =ToDoDataBase();
+
   final todosList=ToDo.toDoList();
   List<ToDo> searchList = [];
 
+ /* void createInitialData(){
+    ToDo(
+        id: "1",
+        taskName: "Create First Task",
+        taskCompleted: false,
+      );
+  }
+  void loadData(){
+    todosList = _myBox.get('TODOS');
+  }
+  void updateData(){
+    _myBox.put('TODOS', todosList);
+  }*/
+
   @override
   void initState() {
+    /*if(_myBox.get('TODOS') == null){
+      createInitialData();
+    }else{
+      loadData();
+    }*/
     searchList = todosList;
     super.initState();
   }
@@ -26,12 +49,14 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       todo.taskCompleted = !todo.taskCompleted!;
     });
+    //updateData();
   }
 
   void deleteTask(String id){
     setState(() {
       todosList.removeWhere((item) => item.id == id);
     });
+    //updateData();
   }
 
   void searchTask(String query){
@@ -40,6 +65,17 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       searchList = results;
     });
+  }
+
+   void addTask(String toDo) {
+    setState(() {
+      todosList.add(ToDo(
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        taskName: toDo,
+      ),
+      );
+    });
+    //updateData();
   }
 
 
@@ -88,11 +124,14 @@ class _HomePageState extends State<HomePage> {
         ],)
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-           Navigator.push(
+        onPressed: () async {
+           var result= await Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const AddTaskPage()),
             );
+            if(result!=null){
+              addTask(result);
+            }
           },
         backgroundColor: tBlue,
         elevation: 5.0,
@@ -111,7 +150,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: TextField(
                   onChanged: (value) => searchTask(value),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                   contentPadding: EdgeInsets.all(0),
                   prefixIcon: Icon(Icons.search, color: tBlack,size: 25,),
                   prefixIconConstraints: BoxConstraints(minWidth: 25, maxHeight: 20),
