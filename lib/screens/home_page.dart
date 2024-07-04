@@ -83,7 +83,26 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: tBgColor,
+      key: _scaffoldKey,
       appBar: _buildAppBar(),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: tBlue,
+              ),
+              child: Text('ToDo App', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold,),),
+            ),
+            ListTile(
+              title: const Text('Made By Rohan Mitra', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold ),),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0),
         child: Column(
@@ -162,6 +181,7 @@ class _HomePageState extends State<HomePage> {
             );
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AppBar _buildAppBar() {
     return AppBar(
       elevation: 0,
@@ -169,14 +189,18 @@ class _HomePageState extends State<HomePage> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-        const Icon(Icons.menu, color: tBlack, size:30,),
+        /*IconButton(icon: Icon(Icons.menu, color: tBlack, size:30,),
+                onPressed: (){
+                  _scaffoldKey.currentState?.openDrawer();
+                },
+          ),*/
         const Text("ToDo Lists", style: TextStyle(color: tBlack, fontWeight: FontWeight.bold),),
         Container(
           height: 40,
           width: 40,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.asset("assets/avatar.jpg", fit: BoxFit.cover,),
+            borderRadius: BorderRadius.circular(0),
+            child: Image.asset("assets/ToDo_icon.png", fit: BoxFit.cover,),
           )
         )
       ],)
