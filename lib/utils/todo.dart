@@ -1,46 +1,30 @@
-//import 'package:hive_flutter/hive_flutter.dart';
-
-class ToDo{
+class ToDo {
   String? id;
   String? taskName;
   bool? taskCompleted;
 
   ToDo({
-  required this.id,
-  required this.taskName,
-  this.taskCompleted = false,
-});
+    required this.id,
+    required this.taskName,
+    this.taskCompleted = false,
+  });
 
-  static List<ToDo> toDoList(){
-    return [
-      ToDo(
-        id: "1",
-        taskName: "Create First Task",
-        taskCompleted: false,
-      ),
-    ];
+  static List<ToDo> toDoList() {
+    return [];
   }
 
+  factory ToDo.fromJson(Map<dynamic, dynamic> json) {
+    return ToDo(
+      id: json['id'],
+      taskName: json['taskName'],
+      taskCompleted: json['taskCompleted'],
+    );
+  }
+  Map<dynamic, dynamic> toJson() {
+    return {
+      'id': id,
+      'taskName': taskName,
+      'taskCompleted': taskCompleted,
+    };
+  }
 }
-
-/*class ToDoDataBase{
-  final _myBox = Hive.box('mybox');
-  static List<ToDo> toDoList=[];
-  void createInitialData(){
-    ToDo(
-        id: "1",
-        taskName: "Create First Task",
-        taskCompleted: false,
-      );
-  }
-
-  void loadData(){
-    toDoList = _myBox.get('TODOS');
-  }
-
-  void updateData(){
-    _myBox.put('TODOS', toDoList);
-  }
-}*/
-
-
