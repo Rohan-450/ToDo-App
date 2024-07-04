@@ -10,7 +10,6 @@ class AddTaskPage extends StatefulWidget {
 
 class _AddTaskPageState extends State<AddTaskPage> {
   final _taskController = TextEditingController();
-  
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 textAlign: TextAlign.left,
               ),
             ),
-            const SizedBox(height:20),
+            const SizedBox(height: 20),
             TextFormField(
               controller: _taskController,
               decoration: InputDecoration(
@@ -52,25 +51,25 @@ class _AddTaskPageState extends State<AddTaskPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(
-                  width:100,
-                  height:45,
+                  width: 100,
+                  height: 45,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context,_taskController.text);
+                      Navigator.pop(context, _taskController.text);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: tBlue,
                     ),
-                    child: const Text('Add', 
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18)),
+                    child: const Text('Add',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18)),
                   ),
                 ),
                 SizedBox(
-                  width:100,
-                  height:45,
+                  width: 100,
+                  height: 45,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -79,10 +78,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       backgroundColor: Colors.red,
                     ),
                     child: const Text('Cancel',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16)),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16)),
                   ),
                 ),
               ],
