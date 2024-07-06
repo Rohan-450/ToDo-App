@@ -21,11 +21,6 @@ To get started with Todo App, follow these simple steps:
 
 ## Screenshots
 
-![Todo App Main Screen](assets/Image1.jpg)
-
-_Main Screen_
-
-![Todo App Task Detail](assets/Image2.jpg)
-
-_Task Detail Screen_
+<center><img src="assets/image1.jpg" width="30%"></center>
+<center><img src="assets/image2.jpg" width="30%"></center>
 
