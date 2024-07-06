@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:todo_app/constants/theme_provider.dart';
+//import 'package:provider/provider.dart';
+//import 'package:todo_app/constants/theme_provider.dart';
 import 'package:todo_app/screens/addtask_page.dart';
 import '../constants/colors.dart';
 import '../utils/database.dart';
@@ -17,14 +17,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<ToDo> todosList = [];
-  List<ToDo> searchList = [];
+  //List<ToDo> searchList = [];
+  String searchQuery = "";
+  List<ToDo> get searchList {
+    if (searchQuery.isEmpty) {
+      return todosList;
+    }
+    return todosList
+        .where((element) =>
+            element.taskName!.toLowerCase().contains(searchQuery.toLowerCase()))
+        .toList();
+  }
 
   HiveDB db = HiveDB();
 
   @override
   void initState() {
     todosList = db.getTodos();
-    searchList = todosList;
     super.initState();
   }
 
@@ -42,7 +51,7 @@ class _HomePageState extends State<HomePage> {
     db.deleteTaskDb(id);
   }
 
-  void searchTask(String query) {
+  /*void searchTask(String query) {
     List<ToDo> results = [];
     results = todosList
         .where((element) =>
@@ -51,7 +60,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       searchList = results;
     });
-  }
+  }*/
 
   void addTask(String toDo) {
     final newTask = ToDo(
@@ -72,59 +81,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: tBgColor,
       key: _scaffoldKey,
       appBar: _buildAppBar(),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                children: [
-                  const DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: tBlue,
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          'ToDo App',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Icon(Icons.edit, color: Colors.white, size: 30,)
-                      ],
-                    ),
-                  ),
-                  ListTile(
-                    leading: IconButton(
-                      icon: const Icon(Icons.nights_stay,
-                          color: tBlack, size: 30),
-                      onPressed: () {
-                        Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              title: const Padding(
-                padding: EdgeInsets.only(bottom: 20),
-                child: Text(
-                  'Made By Rohan Mitra🗿',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      //drawer: _drawerMode(context),
       body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0),
           child: Column(
@@ -143,13 +100,20 @@ class _HomePageState extends State<HomePage> {
                       top: 30,
                       bottom: 25,
                     ),
-                    child: const Text(
-                      "All Tasks",
-                      style: TextStyle(
-                          color: tBlack,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.left,
+                    child: const Row(
+                      children: [
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "All Tasks",
+                          style: TextStyle(
+                              color: tBlack,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.left,
+                        ),
+                      ],
                     ),
                   ),
                 ]),
@@ -179,10 +143,102 @@ class _HomePageState extends State<HomePage> {
         elevation: 5.0,
         shape: const CircleBorder(),
         child: const Icon(
-          Icons.add,
+          Icons.edit,
           size: 30,
           color: Colors.white,
         ),
+      ),
+    );
+  }
+
+  Drawer _drawerMode(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: [
+                const DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: tBlue,
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        'ToDo App',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                        size: 30,
+                      )
+                    ],
+                  ),
+                ),
+                /*ListTile(
+                  leading: IconButton(
+                    icon: const Icon(Icons.nights_stay,
+                        color: tBlack, size: 30),
+                    onPressed: () {
+                      Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),*/
+                ListTile(
+                  leading: IconButton(
+                    icon: const Icon(Icons.info, color: tBlack, size: 30),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('App Information', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                            content: const SingleChildScrollView(
+                              child: ListBody(
+                                children: <Widget>[
+                                  Text('App Name: ToDo App', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                  Text('Version: 1.1.0', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                  Text('Author: Rohan', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('Close', style: TextStyle(fontSize: 18 ,color: Colors.black) ,),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            title: const Padding(
+              padding: EdgeInsets.only(bottom: 20),
+              child: Text(
+                'Made By Rohan🗿',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -195,7 +251,8 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: TextField(
-        onChanged: (value) => {searchTask(value)},
+        cursorColor: tBlack,
+        onChanged: (value) => setState(() => searchQuery = value),
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(0),
           prefixIcon: Icon(
@@ -208,6 +265,9 @@ class _HomePageState extends State<HomePage> {
           hintStyle: TextStyle(color: tGrey, fontSize: 20),
           border: InputBorder.none,
         ),
+        onTapOutside: (_) {
+          FocusScope.of(context).unfocus();
+        },
       ),
     );
   }
@@ -220,11 +280,7 @@ class _HomePageState extends State<HomePage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            /*IconButton(icon: Icon(Icons.menu, color: tBlack, size:30,),
-                onPressed: (){
-                  _scaffoldKey.currentState?.openDrawer();
-                },
-          ),*/
+            const Icon( Icons.menu, color: tBlack, size:30,),
             const Text(
               "ToDo Lists",
               style: TextStyle(color: tBlack, fontWeight: FontWeight.bold),
@@ -232,12 +288,57 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
                 height: 40,
                 width: 40,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(0),
-                  child: Image.asset(
-                    "assets/ToDo_icon.png",
-                    fit: BoxFit.cover,
+                child: GestureDetector(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(0),
+                    child: Image.asset(
+                      "assets/ToDo_icon.png",
+                      fit: BoxFit.cover,
+                    ),
                   ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('App Information',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                          content: const SingleChildScrollView(
+                            child: ListBody(
+                              children: <Widget>[
+                                Text('App Name: ToDo App',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                                Text('Version: 1.1.0',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                                Text('Author: Rohan',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('Close',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  )),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  
+                  },
                 ))
           ],
         ));

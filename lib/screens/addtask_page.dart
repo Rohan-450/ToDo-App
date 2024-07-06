@@ -39,12 +39,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
             const SizedBox(height: 20),
             TextFormField(
               controller: _taskController,
+              cursorColor: tBlue,
               decoration: InputDecoration(
-                labelText: 'New Task',
+                hintText: 'Enter your task',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(color: tBlue, width: 2),
+                ),
               ),
+              onTapOutside: (_) {
+                FocusScope.of(context).unfocus();
+              },
             ),
             const SizedBox(height: 30),
             Row(
@@ -55,6 +63,18 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   height: 45,
                   child: ElevatedButton(
                     onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Task added successfully',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold)),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: tBlue,
+                        ),
+                      );
                       Navigator.pop(context, _taskController.text);
                     },
                     style: ElevatedButton.styleFrom(
