@@ -21,6 +21,5 @@ To get started with Todo App, follow these simple steps:
 
 ## Screenshots
 
-<center><img src="assets/Image1.jpg" width="30%"></center>
-<center><img src="assets/Image2.jpg" width="30%"></center>
+<img src="assets/Image1.jpg" width="25%">&nbsp;&nbsp;&nbsp;&nbsp; <img src="assets/Image2.jpg" width="25%">
 
