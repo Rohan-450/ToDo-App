@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/constants/theme_provider.dart';
 import 'package:todo_app/screens/addtask_page.dart';
 import '../constants/colors.dart';
 import '../utils/database.dart';
@@ -99,16 +101,22 @@ class _HomePageState extends State<HomePage> {
                     leading: IconButton(
                       icon: const Icon(Icons.nights_stay,
                           color: tBlack, size: 30),
-                      onPressed: () {},
+                      onPressed: () {
+                        Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                        Navigator.pop(context);
+                      },
                     ),
                   ),
                 ],
               ),
             ),
             ListTile(
-              title: const Text(
-                'Made By Rohan Mitra🗿',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              title: const Padding(
+                padding: EdgeInsets.only(bottom: 20),
+                child: Text(
+                  'Made By Rohan Mitra🗿',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
               onTap: () {
                 Navigator.pop(context);
@@ -221,7 +229,7 @@ class _HomePageState extends State<HomePage> {
               "ToDo Lists",
               style: TextStyle(color: tBlack, fontWeight: FontWeight.bold),
             ),
-            Container(
+            SizedBox(
                 height: 40,
                 width: 40,
                 child: ClipRRect(

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import '../utils/todo.dart';
 import '../constants/colors.dart';
@@ -20,11 +22,11 @@ class ToDoTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        tileColor: Colors.white,
+        tileColor: Theme.of(context).colorScheme.primary,
         leading: Icon(todo.taskCompleted! ? Icons.check_box : Icons.check_box_outline_blank, color: tBlue),
         title: Text(todo.taskName!, 
               style: TextStyle(
-                color: tBlack, 
+                color:tBlack, 
                 fontSize: 20, 
                 fontWeight: FontWeight.w500,
                 decoration: todo.taskCompleted! ? TextDecoration.lineThrough : null
